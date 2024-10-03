@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex Kalos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 56px; 
+            background-color: #000; 
+            color: #fff; 
+        }
+        header {
+            background: url('images/kalos_header_bg.png') no-repeat center center;
+            background-size: cover;
+            color: white; 
+        }
+        .navbar {
+            background-color: #333; 
+        }
+        .navbar-brand, .nav-link {
+            color: #fff; 
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ddd; 
+        }
+        .page {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        footer {
+            background-color: #333; 
+            color: #fff; 
+        }
+        .card {
+            background-color: #222; 
+            color: #fff; 
+        }
+        .form-control, .form-control:focus {
+            background-color: #333; 
+            color: #fff; 
+            border-color: #555; 
+        }
+        .btn-primary {
+            background-color: #007bff; 
+            border-color: #007bff; 
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; 
+            border-color: #004080; 
+        }
+        .pokemon-list {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0; 
+        }
+        .pokemon-item {
+            flex: 0 0 20%; 
+            text-align: center; 
+            margin-bottom: 20px; 
+        }
+        .pokemon-img {
+            width: 70%; /* Ajusta a largura das imagens */
+        }
+        .mb-3 {
+            margin-bottom: 1rem; 
+        }
+        span {
+            color: #fff;  
+            font-weight: bold; 
+            display: block; 
+            margin-top: 5px;
+        }
+        h5 {
+            color: #fff;  /* Cor dos títulos */
+        }
+    </style>
+    <script>
+        function showTypes(pokemonName) {
+            const types = {
+                "CHESPIN": "Planta",
+                "QUILLADIN": "Planta",
+                "CHESNAUGHT": "Planta/Luta",
+                "FENNEKIN": "Fogo",
+                "BRAIXEN": "Fogo",
+                "DELPHOX": "Fogo/Psíquico",
+                "FROAKIE": "Água",
+                "FROGADIER": "Água",
+                "GRENINJA": "Água/Sombrio",
+                "BUNNELBY": "Normal",
+                "DIGGERSBY": "Normal/Terra",
+                "FLETCHLING": "Normal/Voador",
+                "FLETCHINDER": "Fogo/Voador",
+                "TALONFLAME": "Fogo/Voador",
+                "SCATTERBUG": "Inseto",
+                "SPEWPA": "Inseto",
+                "VIVILLON": "Inseto/Voador",
+                "LITLEO": "Fogo/Normal",
+                "PYROAR": "Fogo/Normal",
+                "FLABEBE": "Fada",
+                "FLOETTE": "Fada",
+                "FLORGES": "Fada",
+                "SKIDDO": "Planta",
+                "GOGOAT": "Planta",
+                "PANGORO": "Sombrio/Luta",
+                "FURFROU": "Normal",
+                "ESPURR": "Normal",
+                "MEOWSTIC-MALE": "Psíquico",
+                "HONEDGE": "Fantasma/Aço",
+                "DOUBLADE": "Fantasma/Aço",
+                "AEGISLASH-SHIELD": "Fantasma/Aço",
+                "SPRITZEE": "Fada",
+                "AROMATISSE": "Fada",
+                "SWIRLIX": "Fada",
+                "SLURPUFF": "Fada",
+                "INKAY": "Sombrio/Psíquico",
+                "MALAMAR": "Sombrio/Psíquico",
+                "BINACLE": "Água/Rochoso",
+                "BARBARACLE": "Água/Rochoso",
+                "SKRELP": "Água/Venenoso",
+                "DRAGALGE": "Água/Venenoso",
+                "CLAUNCHER": "Água",
+                "CLAWITZER": "Água",
+                "HELIOPTILE": "Elétrico/Normal",
+                "HELIOLISK": "Elétrico/Normal",
+                "TYRUNT": "Rocha/Gelo",
+                "TYRANTRUM": "Rocha/Gelo",
+                "AMAURA": "Gelo/Rocha",
+                "AURORUS": "Gelo/Rocha",
+                "SYLVEON": "Fada",
+                "HAWLUCHA": "Luta/Voador",
+                "DEDENNE": "Fada/Elétrico",
+                "CARBINK": "Rocha/Fada",
+                "GOOMY": "Dragão",
+                "SLIGGOO": "Dragão",
+                "GOODRA": "Dragão",
+                "KLEFKI": "Aço/Fantasma",
+                "PHANTUMP": "Fantasma/Grama",
+                "TREVENANT": "Fantasma/Grama",
+                "PUMPKABOO-AVERAGE": "Fantasma/Grama",
+                "GOURGEIST-AVERAGE": "Fantasma/Grama",
+                "BERGMITE": "Gelo",
+                "AVALUGG": "Gelo",
+                "NOIBAT": "Voador/Sombrio",
+                "NOIVERN": "Voador/Sombrio",
+                "XERNEAS": "Fada",
+                "YVELTAL": "Sombrio/Voador",
+                "ZYGARDE-50": "Dragão/Terra",
+                "DIANCIE": "Pedra/Fada",
+                "HOOPA": "Fantasma/Psíquico",
+                "VOLCANION": "Fogo/Água",
+            };
+
+            alert(pokemonName + ": " + types[pokemonName]);
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <a class="navbar-brand" href="#">Pokedex Kalos</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#home" onclick="showPage('home')">Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#pokemons" onclick="showPage('pokemons')">Pokémons</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#trainer" onclick="showPage('trainer')">Treinador</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#add-pokemon" onclick="showPage('add-pokemon')">Cadastrar Pokémon</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="home" class="bg-primary text-white text-center py-5 page active">
+        <h1>Bem-vindo à Pokedex Kalos</h1>
+        <p>Descubra todos os Pokémon da região Kalos!</p>
+        <p>Essa página foi gerada com intuito de informar sobre os Pokémons de Kalos!</p>
+    </header>
+
+    <main class="container mt-5">
+        <section id="pokemons" class="page">
+            <h1>Pokémons de Kalos</h1>
+            <div class="pokemon-list">
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/650.svg" class="img-fluid pokemon-img" alt="CHESPIN">
+                    <span>CHESPIN</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('CHESPIN')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/651.svg" class="img-fluid pokemon-img" alt="QUILLADIN">
+                    <span>QUILLADIN</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('QUILLADIN')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/652.svg" class="img-fluid pokemon-img" alt="CHESNAUGHT">
+                    <span>CHESNAUGHT</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('CHESNAUGHT')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/653.svg" class="img-fluid pokemon-img" alt="FENNEKIN">
+                    <span>FENNEKIN</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FENNEKIN')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/654.svg" class="img-fluid pokemon-img" alt="BRAIXEN">
+                    <span>BRAIXEN</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('BRAIXEN')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/655.svg" class="img-fluid pokemon-img" alt="DELPHOX">
+                    <span>DELPHOX</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('DELPHOX')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/656.svg" class="img-fluid pokemon-img" alt="FROAKIE">
+                    <span>FROAKIE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FROAKIE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/657.svg" class="img-fluid pokemon-img" alt="FROGADIER">
+                    <span>FROGADIER</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FROGADIER')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/658.svg" class="img-fluid pokemon-img" alt="GRENINJA">
+                    <span>GRENINJA</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('GRENINJA')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/659.svg" class="img-fluid pokemon-img" alt="BUNNELBY">
+                    <span>BUNNELBY</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('BUNNELBY')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/660.svg" class="img-fluid pokemon-img" alt="DIGGERSBY">
+                    <span>DIGGERSBY</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('DIGGERSBY')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/661.svg" class="img-fluid pokemon-img" alt="FLETCHLING">
+                    <span>FLETCHLING</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FLETCHLING')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/662.svg" class="img-fluid pokemon-img" alt="FLETCHINDER">
+                    <span>FLETCHINDER</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FLETCHINDER')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/663.svg" class="img-fluid pokemon-img" alt="TALONFLAME">
+                    <span>TALONFLAME</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('TALONFLAME')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/664.svg" class="img-fluid pokemon-img" alt="SCATTERBUG">
+                    <span>SCATTERBUG</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SCATTERBUG')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/665.svg" class="img-fluid pokemon-img" alt="SPEWPA">
+                    <span>SPEWPA</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SPEWPA')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/666.svg" class="img-fluid pokemon-img" alt="VIVILLON">
+                    <span>VIVILLON</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('VIVILLON')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/667.svg" class="img-fluid pokemon-img" alt="LITLEO">
+                    <span>LITLEO</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('LITLEO')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/668.svg" class="img-fluid pokemon-img" alt="PYROAR">
+                    <span>PYROAR</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('PYROAR')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/669.svg" class="img-fluid pokemon-img" alt="FLABEBE">
+                    <span>FLABEBE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FLABEBE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/670.svg" class="img-fluid pokemon-img" alt="FLOETTE">
+                    <span>FLOETTE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FLOETTE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/671.svg" class="img-fluid pokemon-img" alt="FLORGES">
+                    <span>FLORGES</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FLORGES')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/672.svg" class="img-fluid pokemon-img" alt="SKIDDO">
+                    <span>SKIDDO</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SKIDDO')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/673.svg" class="img-fluid pokemon-img" alt="GOGOAT">
+                    <span>GOGOAT</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('GOGOAT')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/675.svg" class="img-fluid pokemon-img" alt="PANGORO">
+                    <span>PANGORO</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('PANGORO')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/676.svg" class="img-fluid pokemon-img" alt="FURFROU">
+                    <span>FURFROU</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('FURFROU')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/677.svg" class="img-fluid pokemon-img" alt="ESPURR">
+                    <span>ESPURR</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('ESPURR')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/678.svg" class="img-fluid pokemon-img" alt="MEOWSTIC-MALE">
+                    <span>MEOWSTIC-MALE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('MEOWSTIC-MALE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/679.svg" class="img-fluid pokemon-img" alt="HONEDGE">
+                    <span>HONEDGE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('HONEDGE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/680.svg" class="img-fluid pokemon-img" alt="DOUBLADE">
+                    <span>DOUBLADE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('DOUBLADE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/681.svg" class="img-fluid pokemon-img" alt="AEGISLASH-SHIELD">
+                    <span>AEGISLASH-SHIELD</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('AEGISLASH-SHIELD')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/682.svg" class="img-fluid pokemon-img" alt="SPRITZEE">
+                    <span>SPRITZEE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SPRITZEE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/683.svg" class="img-fluid pokemon-img" alt="AROMATISSE">
+                    <span>AROMATISSE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('AROMATISSE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/684.svg" class="img-fluid pokemon-img" alt="SWIRLIX">
+                    <span>SWIRLIX</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SWIRLIX')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/685.svg" class="img-fluid pokemon-img" alt="SLURPUFF">
+                    <span>SLURPUFF</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SLURPUFF')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/686.svg" class="img-fluid pokemon-img" alt="INKAY">
+                    <span>INKAY</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('INKAY')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/687.svg" class="img-fluid pokemon-img" alt="MALAMAR">
+                    <span>MALAMAR</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('MALAMAR')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/688.svg" class="img-fluid pokemon-img" alt="BINACLE">
+                    <span>BINACLE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('BINACLE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/689.svg" class="img-fluid pokemon-img" alt="BARBARACLE">
+                    <span>BARBARACLE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('BARBARACLE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/690.svg" class="img-fluid pokemon-img" alt="SKRELP">
+                    <span>SKRELP</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SKRELP')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/691.svg" class="img-fluid pokemon-img" alt="DRAGALGE">
+                    <span>DRAGALGE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('DRAGALGE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/692.svg" class="img-fluid pokemon-img" alt="CLAUNCHER">
+                    <span>CLAUNCHER</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('CLAUNCHER')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/693.svg" class="img-fluid pokemon-img" alt="CLAWITZER">
+                    <span>CLAWITZER</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('CLAWITZER')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/694.svg" class="img-fluid pokemon-img" alt="HELIOPTILE">
+                    <span>HELIOPTILE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('HELIOPTILE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/695.svg" class="img-fluid pokemon-img" alt="HELIOLISK">
+                    <span>HELIOLISK</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('HELIOLISK')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/696.svg" class="img-fluid pokemon-img" alt="TYRUNT">
+                    <span>TYRUNT</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('TYRUNT')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/697.svg" class="img-fluid pokemon-img" alt="TYRANTRUM">
+                    <span>TYRANTRUM</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('TYRANTRUM')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/698.svg" class="img-fluid pokemon-img" alt="AMAURA">
+                    <span>AMAURA</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('AMAURA')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/699.svg" class="img-fluid pokemon-img" alt="AURORUS">
+                    <span>AURORUS</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('AURORUS')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/700.svg" class="img-fluid pokemon-img" alt="SYLVEON">
+                    <span>SYLVEON</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SYLVEON')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/701.svg" class="img-fluid pokemon-img" alt="HAWLUCHA">
+                    <span>HAWLUCHA</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('HAWLUCHA')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/702.svg" class="img-fluid pokemon-img" alt="DEDENNE">
+                    <span>DEDENNE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('DEDENNE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/703.svg" class="img-fluid pokemon-img" alt="CARBINK">
+                    <span>CARBINK</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('CARBINK')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/704.svg" class="img-fluid pokemon-img" alt="GOOMY">
+                    <span>GOOMY</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('GOOMY')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/705.svg" class="img-fluid pokemon-img" alt="SLIGGOO">
+                    <span>SLIGGOO</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('SLIGGOO')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/706.svg" class="img-fluid pokemon-img" alt="GOODRA">
+                    <span>GOODRA</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('GOODRA')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/707.svg" class="img-fluid pokemon-img" alt="KLEFKI">
+                    <span>KLEFKI</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('KLEFKI')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/708.svg" class="img-fluid pokemon-img" alt="PHANTUMP">
+                    <span>PHANTUMP</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('PHANTUMP')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/709.svg" class="img-fluid pokemon-img" alt="TREVENANT">
+                    <span>TREVENANT</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('TREVENANT')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/710.svg" class="img-fluid pokemon-img" alt="PUMPKABOO-AVERAGE">
+                    <span>PUMPKABOO-AVERAGE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('PUMPKABOO-AVERAGE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/711.svg" class="img-fluid pokemon-img" alt="GOURGEIST-AVERAGE">
+                    <span>GOURGEIST-AVERAGE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('GOURGEIST-AVERAGE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/712.svg" class="img-fluid pokemon-img" alt="BERGMITE">
+                    <span>BERGMITE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('BERGMITE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/713.svg" class="img-fluid pokemon-img" alt="AVALUGG">
+                    <span>AVALUGG</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('AVALUGG')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/714.svg" class="img-fluid pokemon-img" alt="NOIBAT">
+                    <span>NOIBAT</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('NOIBAT')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/715.svg" class="img-fluid pokemon-img" alt="NOIVERN">
+                    <span>NOIVERN</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('NOIVERN')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/716.svg" class="img-fluid pokemon-img" alt="XERNEAS">
+                    <span>XERNEAS</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('XERNEAS')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/717.svg" class="img-fluid pokemon-img" alt="YVELTAL">
+                    <span>YVELTAL</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('YVELTAL')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/718.svg" class="img-fluid pokemon-img" alt="ZYGARDE-50">
+                    <span>ZYGARDE-50</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('ZYGARDE-50')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/719.svg" class="img-fluid pokemon-img" alt="DIANCIE">
+                    <span>DIANCIE</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('DIANCIE')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/720.svg" class="img-fluid pokemon-img" alt="HOOPA">
+                    <span>HOOPA</span>
+                    <button class="btn btn-info mt-2" onclick="showTypes('HOOPA')">Tipos</button>
+                </div>
+                <div class="pokemon-item">
+                    <img src="https://repositorio.sbrauble.com/arquivos/up/pokedex/721.svg" class="img-fluid pokemon-img" alt="VOLCANION">
+                    <span>VOLCANION</span>
+                    <button class="btn btn-info mt-2 mx-auto d-block" onclick="showTypes('VOLCANION')">Tipos</button>
+                </div>                
+            </div>
+        </section>
+
+        <section id="add-pokemon" class="page">
+            <h1>Cadastrar Novo Pokémon</h1>
+            <form>
+                <div class="form-group">
+                    <label for="pokemonName">Nome</label>
+                    <input type="text" class="form-control" id="pokemonName" placeholder="Nome do Pokémon">
+                </div>
+                <div class="form-group">
+                    <label for="pokemonType">Tipo</label>
+                    <select class="form-control" id="pokemonType">
+                        <option>Fogo</option>
+                        <option>Água</option>
+                        <option>Planta</option>
+                        <option>Elétrico</option>
+                        <option>Normal</option>
+                        <option>Sombrio</option> 
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pokemonRegion">Região</label>
+                    <select class="form-control" id="pokemonRegion">
+                        <option>Kalos</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pokemonImage">Imagem (URL)</label>
+                    <input type="text" class="form-control" id="pokemonImage" placeholder="URL da imagem">
+                </div>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </form>
+        </section>
+    </main>
+    
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Pokedex Kalos. Todos os direitos reservados.</p>
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(function(page) {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
